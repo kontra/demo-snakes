@@ -6,7 +6,7 @@ let intervalA;
 
 const wh=window.innerHeight-20;
 const speed=3;
-const num=50;
+const num=500;
 const interval=40;
 
 class Dot {
@@ -19,7 +19,7 @@ class Dot {
     this.newMove();
   }
     newMove() {
-        this.steps = round(random()*40+5);
+        this.steps = round(random()*80+15);
         this.da = (random()*360-180)*Math.PI/180/this.steps;    
     }
     checkBounds() {
@@ -54,7 +54,7 @@ function init(){
     canvas.width=W=window.innerWidth;
     canvas.height=H=window.innerHeight;
     ctx=canvas.getContext("2d");    
-    cellSize =W/30;    
+    cellSize =W/60;    
     ctx.font = `bolder ${cellSize}px monospace`;
     
   //  restart();
@@ -68,7 +68,7 @@ function init(){
 
 
 function fade(){
-    ctx.fillStyle="rgba(0,0,0,0.1)";
+    ctx.fillStyle="rgba(0,0,0,0.01)";
     ctx.fillRect(0,0,W,H)
 }
 
