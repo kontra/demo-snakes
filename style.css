@@ -1,2 +1,13 @@
-body {background-color:black;}
-o {position:absolute;}
+body {
+    box-sizing:border-box ;
+    margin:0 0 0 0;
+    background-color:black;
+}
+
+h3{
+    z-index:2;
+    position:absolute ;
+    bottom:0.5em;
+    color:blue;
+    font-family:monospace;
+}

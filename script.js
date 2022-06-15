@@ -1,26 +1,29 @@
-const ww=window.innerWidth-20;
+let {random,floor,ceil,round}=Math;
+let canvas,ctx,W,H;
+let dots=[];
+let fontSize=10;
+let intervalA;
+
 const wh=window.innerHeight-20;
 const speed=3;
-const num=30;
-const tail=50;
-const interval=30;
+const num=50;
+const interval=40;
 
 class Dot {
-    constructor() {
-        this.o = [];
-        this.x = Math.random()*ww;
-        this.y = Math.random()*wh;
-        this.angle = Math.random()*360*Math.PI/180;
-        this.speed = speed;
-        this.color = '#'+(Math.round(Math.random()*0xffffff)).toString(16);
-        this.newMove();
-    }
+  constructor() {
+    this.x = random()*W;
+    this.y = random()*H;
+    this.angle = random()*360*Math.PI/180;
+    this.speed = speed;
+    this.color = '#'+(round(random()*0xffffff)).toString(16);
+    this.newMove();
+  }
     newMove() {
-        this.steps = Math.round(Math.random()*60+5);
-        this.da = (Math.random()*360-180)*Math.PI/180/this.steps;    
+        this.steps = round(random()*40+5);
+        this.da = (random()*360-180)*Math.PI/180/this.steps;    
     }
     checkBounds() {
-        if(this.x<0||this.x>ww||this.y<0||this.y>wh) {
+        if(this.x<0||this.x>W||this.y<0||this.y>H) {
             this.angle += 90*Math.PI/180;
             this.step();
         } else {
@@ -35,28 +38,44 @@ class Dot {
         this.checkBounds();
     }
     move() {
-        let e = document.createElement('o');
-        e.innerText = '>';
-        e.style.transform = 'rotate('+this.angle+'rad)';
-        e.style.left = this.x;
-        e.style.top = this.y;
-        e.style.color = this.color;
-        this.o.unshift(e);
-        document.body.appendChild(e);
-        for(let i=0;i<this.o.length;i++)
-            this.o[i].style.opacity = 1-i/this.o.length;
-        if(this.o.length>tail) {
-            let u = this.o.pop();
-            document.body.removeChild(u);
-        }
+        ctx.fillStyle = this.color;
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillText(">", -5, -5);
+        ctx.rotate(-this.angle);
+        ctx.translate(-this.x, -this.y);
         this.steps--;
     }
 }
 
 
-let dots = [];
-for(let i=0;i<num;i++) dots.push(new Dot());
+function init(){
+    canvas=document.getElementById("canvas");
+    canvas.width=W=window.innerWidth;
+    canvas.height=H=window.innerHeight;
+    ctx=canvas.getContext("2d");    
+    cellSize =W/30;    
+    ctx.font = `bolder ${cellSize}px monospace`;
+    
+  //  restart();
 
-setInterval(function(){
-   for(d in dots) dots[d].step();
-}, interval);
+    for(let i=0;i<num;i++) dots.push(new Dot());
+    intervalA = setInterval(function(){
+      for(d in dots) dots[d].step();
+      fade();
+    }, interval);
+}
+
+
+function fade(){
+    ctx.fillStyle="rgba(0,0,0,0.1)";
+    ctx.fillRect(0,0,W,H)
+}
+
+
+function restart(){
+    clearInterval(intervalA);
+    ctx.fillStyle="rgba(0,0,0,1)";
+    ctx.fillRect(0,0,W,H);
+    init();
+}
